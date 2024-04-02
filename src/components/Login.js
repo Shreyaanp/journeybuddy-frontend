@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', { email, password });
+      const response = await axios.post('https://journeybuddy-backend.onrender.com/login', { email, password });
       setAlert({ message: response.data.message, type: 'success', show: true });
       setTimeout(() => navigate('/dashboard'), 300);
     } catch (error) {
