@@ -30,4 +30,19 @@
     float: right;
     cursor: pointer;
   }
-  
+  .autocomplete-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: white;
+    position: absolute;
+
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1001; // Ensure this is higher than other content but below modal overlay
+  }
+  .flightresult{
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 20px;
+    border-bottom: 1px solid #ccc;
+  }

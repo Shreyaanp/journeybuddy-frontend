@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Modal.scss';
+import FlightInfoModal from './FlightInfoModal';
 
 const Modal = ({ isOpen, close, hotel, attractionsData }) => {
+  const [isFlightModalOpen, setIsFlightModalOpen] = useState(false);
+
   if (!isOpen) return null;
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -32,7 +35,11 @@ const Modal = ({ isOpen, close, hotel, attractionsData }) => {
 
   const walkableAttractions = attractionsWithDistance.filter(attraction => attraction.distance <= 1).sort((a, b) => a.distance - b.distance);
   const longDistanceAttractions = attractionsWithDistance.filter(attraction => attraction.distance > 1).sort((a, b) => a.distance - b.distance);
-  console.log(attractionsData)
+
+  const openFlightModal = () => {
+    setIsFlightModalOpen(true);
+  };
+
   return (
     <div className="modal-overlay" onClick={close}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -68,6 +75,8 @@ const Modal = ({ isOpen, close, hotel, attractionsData }) => {
           )) : <li>No long distance attractions nearby.</li>}
         </ul></div>
         </div>
+        <button onClick={openFlightModal} >Check for Flight</button>
+        <FlightInfoModal isOpen={isFlightModalOpen} onClose={() => setIsFlightModalOpen(false)} />
       </div>
     </div>
   );
