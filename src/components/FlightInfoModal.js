@@ -28,8 +28,7 @@ const airports = {
     Dehradun: { lat: 30.1897, lon: 78.1803 },
     Raipur: { lat: 21.2415, lon: 81.6337 },
     Jammu: { lat: 32.6891, lon: 74.8374 }
-  };
-  
+};
 
 const airlines = ["Air India", "IndiGo", "Vistara", "SpiceJet", "GoAir"];
 
@@ -71,19 +70,21 @@ const FlightInfoModal = ({ isOpen, onClose }) => {
     if (airports[from] && airports[to]) {
       const baseDistance = calculateDistance(airports[from].lat, airports[from].lon, airports[to].lat, airports[to].lon);
       const flightsData = Array.from({ length: 5 }).map((_, index) => {
-        const fluctuation = (Math.random() * 0.2 - 0.1) * baseDistance; // +-10% fluctuation in distance
+        const fluctuation = (Math.random() * 0.2 - 0.1) * baseDistance;
         const distance = baseDistance + fluctuation;
         const cost = calculateCost(distance);
+        const duration = calculateDuration(distance);
         const airline = airlines[Math.floor(Math.random() * airlines.length)];
         return {
           from, to, date, airline,
           distance: distance.toFixed(2),
-          cost: cost.toFixed(2)
+          cost: cost.toFixed(2),
+          duration: duration.toFixed(2) + ' hours'
         };
       });
       setFlights(flightsData);
     } else {
-      setFlights([]); 
+      setFlights([]);
     }
   };
 
@@ -96,16 +97,19 @@ const FlightInfoModal = ({ isOpen, onClose }) => {
       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; 
+    return R * c;
   }
 
   function calculateCost(distance) {
-    return distance * 5;
+    return distance * 5; // Assuming 5 INR per km
+  }
+
+  function calculateDuration(distance) {
+    const averageSpeedKmH = 900; // Average speed of a commercial jet
+    return distance / averageSpeedKmH; // Duration in hours
   }
 
   if (!isOpen) return null;
-
-  console.log(flights, suggestions)
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -144,11 +148,11 @@ const FlightInfoModal = ({ isOpen, onClose }) => {
             <div className='flightresult-container'>
               {flights.map((flight, index) => (
                 <div className='flightresult' key={index}>
-                  {flight.airline} Flight from {flight.from} to {flight.to} on {flight.date}. 
-                  Distance: {flight.distance} km, Cost: INR {flight.cost}
+                  {flight.airline} Flight from {flight.from} to {flight.to} on {flight.date}.
+                  Distance: {flight.distance} km, Cost: INR {flight.cost}, Duration: {flight.duration}
                 </div>
               ))}
-          </div>
+            </div>
           </div>
         )}
       </div>

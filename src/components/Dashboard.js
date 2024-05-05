@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Dashboard.scss";
 import axios from "axios";
 import Modal from "./Modal";
+import FlightInfoModal from "./FlightInfoModal";
 
 const initialUserData = {
   name: "",
@@ -76,6 +77,7 @@ const questions = [
 function Chatbot() {
   const [userData, setUserData] = useState(initialUserData);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [openFlight, setOpenFlight] = useState(false);
   const [chatHistory, setChatHistory] = useState([
     { by: "bot", message: "Hi there! I'm TravelBuddy. Let's get started. What's your name?" },
   ]);
@@ -124,6 +126,9 @@ function Chatbot() {
       </div>
     );
   };
+  const handleFlightDetails = () => {
+    setOpenFlight(true);
+  }
 
   const openModal = (hotel, attractionsData) => {
     setSelectedHotel(hotel);
@@ -271,16 +276,24 @@ function Chatbot() {
     }
   };
 
+
   return (
     <div className="dashboard-container">
       {modalOpen && (
         <Modal isOpen={modalOpen} close={closeModal} hotel={selectedHotel} attractionsData={attractionsData} />
       )}
+      {
+        openFlight && (
+          <FlightInfoModal isOpen={openFlight} onClose={() => setOpenFlight(false)} />
+        )
+      }
       <div className="chathistory-container">
         <header>
           <h1>TravelBuddy</h1>
         </header>
         <footer>
+          <button className= "flight"onClick={handleFlightDetails}>Get Flight Details</button>
+          <div className="lowerContent">
           <img
             src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
             alt="Profile"
@@ -295,6 +308,7 @@ function Chatbot() {
           >
             Clear Chat
           </button>
+          </div>
         </footer>
       </div>
       <div className="chatbot-container">
